@@ -280,6 +280,7 @@ class Instructions():
 
         global back_option
         back_option = Button(75, 50, 75, 50, default_color, hover_color, current_color, 'Back')
+
     def draw(self):
 
         # Set up instructions txt
@@ -319,7 +320,7 @@ class Exitscreen():
 
         # Print exitscreen txt
 
-        arcade.draw_text('Your Died \n\n Your Score: {}'.format(score), WIDTH / 2, HEIGHT / 2, arcade.color.BLACK,40,
+        arcade.draw_text('You Died \n\n Your Score: {}'.format(score), WIDTH / 2, HEIGHT / 2, arcade.color.BLACK,40,
                          align='center', anchor_x='center', anchor_y='center')
 
         # Set up back button
@@ -371,6 +372,7 @@ def update(delta_time):
     if game_bool == True:
         # Check for contact
         if game.update() == 'Contact':
+            print('contact')
             exitscreen_bool = True
             game_bool = False
 
@@ -391,6 +393,28 @@ def on_draw():
 
     elif exitscreen_bool == True:
         exitscreen.draw(game.game_score)
+
+        # Restart all game logic
+        game.bolder_list = arcade.SpriteList()
+
+        # Initial bolder creation (default bolders in the game)
+        for i in range(3):
+            skin = random.choice(game.bolder_skins)
+            x = random.randint(100, WIDTH - 100)
+            y = random.randint(100, HEIGHT - 100)
+            scale = random.uniform(0.15, 0.23)
+            bolder = Bolder(skin, scale, center_x=x, center_y=y)
+            bolder.change_x = random.uniform(-5, 5 + 1)
+            bolder.change_y = random.uniform(-5, 5 + 1)
+            game.bolder_list.append(bolder)
+
+        # Player movements
+        game.player.change_x = 0
+        game.player.change_y = 0
+        game.key_map = {'up pressed': False, 'down pressed': False, 'right pressed': False, 'left pressed': False}
+
+        # Bullets
+        game.bullet_list = arcade.SpriteList()
 
 def on_key_press(key, modifiers):
     if game_bool == True:
@@ -441,6 +465,7 @@ def on_mouse_press(x, y, button, modifiers):
             # Go back to main menu
             exitscreen_bool = False
             main_menu_bool = True
+            game.game_score = 0
 
     elif game_bool == True:
         game.on_mouse_press(x, y)
@@ -493,7 +518,7 @@ def setup():
     credits_bool = False
     exitscreen_bool = False
 
-    # Info about the actual game play
+    # Info about the actual gameplay
 
     # Bolders
     bolder_skins = [
@@ -502,7 +527,19 @@ def setup():
         'Image Folder/spaceMeteors_003.png',
         'Image Folder/spaceMeteors_004.png'
     ]
+
     bolder_list = arcade.SpriteList()
+
+    # Initial bolder creation (default bolders in the game)
+    for i in range(3):
+        skin = random.choice(bolder_skins)
+        x = random.randint(100,WIDTH - 100)
+        y = random.randint(100, HEIGHT - 100)
+        scale = random.uniform(0.15, 0.23)
+        bolder = Bolder(skin, scale, center_x = x, center_y = y)
+        bolder.change_x = random.uniform(-5,5 + 1)
+        bolder.change_y = random.uniform(-5, 5 + 1)
+        bolder_list.append(bolder)
 
     # Player and player movement
     player = Player('Image Folder/Space_ship.png',0.40,center_x= WIDTH / 2, center_y=HEIGHT / 2)
@@ -516,17 +553,6 @@ def setup():
     # Score data
     frame_count = 0
     game_score = 0
-
-    # Initial bolder creation (default bolders in the game)
-    for i in range(3):
-        skin = random.choice(bolder_skins)
-        x = random.randint(100,WIDTH - 100)
-        y = random.randint(100, HEIGHT - 100)
-        scale = random.uniform(0.15, 0.23)
-        bolder = Bolder(skin, scale, center_x = x, center_y = y)
-        bolder.change_x = random.uniform(-5,5 + 1)
-        bolder.change_y = random.uniform(-5, 5 + 1)
-        bolder_list.append(bolder)
 
     global game
     game = Game(key_map, frame_count, game_score, bolder_list, bolder_skins, player, bullet_list)
