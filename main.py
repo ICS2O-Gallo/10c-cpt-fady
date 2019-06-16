@@ -43,7 +43,7 @@ class Player(arcade.Sprite):
         self.center_x += self.change_x
         self.center_y += self.change_y
 
-        #Border checks
+        # Border checks
         if self.center_x - self.width / 2 < 0:
             self.center_x = self.width / 2
             self.change_x = 0
@@ -58,18 +58,18 @@ class Player(arcade.Sprite):
             self.center_y = self.height / 2
             self.change_y = 0
 
-def bolder_split(bolder,game_info):# Bolder splits into smaller pieces
+def bolder_split(bolder,game_info): # Bolder splits into smaller pieces
     # Get info
     bolder.kill()
     x = bolder.center_x
     y = bolder.center_y
     scale = bolder.scale
 
-    #Make new boldes
+    # Make new boldes
     for i in range(random.randint(2,5)):
 
         new_scale = scale * 0.5
-        #Check to see if bolder is too small
+        # Check to see if bolder is too small
         if new_scale >= 0.05:
             skin = random.choice(game_info.bolder_skins)
             bolder = Bolder(skin, new_scale, center_x=x,center_y=y)
@@ -89,16 +89,13 @@ class Game():
         self.bullet_list = bullet_list
 
     def update(self):
-
-        #####################################################################################################################
-
         # Increment score and frames
         self.frame_count += 1
         if self.frame_count % 20 == 0:
             self.game_score += 1
 
         # Bolder creation
-        if self.frame_count % 240 == 0:
+        if self.frame_count % 280 == 0:
             x = random.randint(100, WIDTH - 100)
             y = random.randint(100, HEIGHT - 100)
             bolder = Bolder('Image Folder/spaceMeteors_001.png', 0.2, center_x=x, center_y=y)
@@ -135,13 +132,10 @@ class Game():
         for bolder in self.bolder_list:
             player_bolder_collision = arcade.check_for_collision(self.player, bolder)
             if player_bolder_collision == True:
-                print('CONTACT')
-                # arcade.pause(5)
+                return 'Contact'
 
         self.bullet_list.update()
         self.bolder_list.update()
-
-    #####################################################################################################################
 
     def on_draw(self):
         # Score
@@ -214,7 +208,7 @@ class Game():
         self.player.angle = new_angle
 
 class Button():
-    def __init__(self,x,y,w,h,default_color, hover_color, current_color,text):
+    def __init__(self, x, y, w, h, default_color, hover_color, current_color,text):
         self.x = x
         self.y = y
         self.w = w
@@ -247,22 +241,23 @@ class Menu():
         hover_color = (204, 255, 229)
         current_color = default_color
         instructions_option = Button(WIDTH / 2, HEIGHT / 2 + 100,100,35,
-                            default_color,hover_color,current_color,'Instructions')
+                            default_color, hover_color, current_color, 'Instructions')
         game_option = Button(WIDTH / 2, HEIGHT / 2,100,35,
-                            default_color,hover_color,current_color,'Game')
+                            default_color, hover_color, current_color, 'Game')
         credits_option = Button(WIDTH / 2, HEIGHT / 2 - 100,100,35,
-                            default_color,hover_color,current_color,'Credits')
+                            default_color, hover_color, current_color, 'Credits')
 
     def draw(self):
         instructions_option.draw()
         game_option.draw()
         credits_option.draw()
-        arcade.draw_text('Shoot Space',WIDTH / 2,HEIGHT / 2 + 225,arcade.color.BLACK,45,align='center',anchor_y='center',anchor_x='center')
+        arcade.draw_text('Shoot Space', WIDTH / 2,HEIGHT / 2 + 225,arcade.color.BLACK, 45,
+                         align='center', anchor_y='center', anchor_x='center')
 
-    def on_hover(self,mouse_x,mouse_y):
-        instructions_option.on_hover(mouse_x,mouse_y)
-        game_option.on_hover(mouse_x,mouse_y)
-        credits_option.on_hover(mouse_x,mouse_y)
+    def on_hover(self, mouse_x, mouse_y):
+        instructions_option.on_hover(mouse_x, mouse_y)
+        game_option.on_hover(mouse_x, mouse_y)
+        credits_option.on_hover(mouse_x, mouse_y)
 
     def on_click(self,mouse_x,mouse_y):
 
@@ -284,14 +279,18 @@ class Instructions():
         current_color = default_color
 
         global back_option
-        back_option = Button(75,50,75,50,default_color,hover_color,current_color,'Back')
+        back_option = Button(75, 50, 75, 50, default_color, hover_color, current_color, 'Back')
     def draw(self):
 
         # Set up instructions txt
-        arcade.draw_text('Instructions', WIDTH/2, HEIGHT/2 + 200, arcade.color.BLACK,35,anchor_x='center',anchor_y='center',align='center')
-        arcade.draw_text('Movement \n\n W,A,S,D to move.', WIDTH/2, HEIGHT/2 + 100, arcade.color.ORANGE,25,anchor_x='center',anchor_y='center',align='center')
-        arcade.draw_text('Shooting \n\n Left click to shoot.', WIDTH/2, HEIGHT/2, arcade.color.RED,25,anchor_x='center',anchor_y='center',align='center')
-        arcade.draw_text('Aiming \n\n Cursor to aim.', WIDTH/2, HEIGHT/2 - 100, arcade.color.GRAPE,25,anchor_x='center',anchor_y='center',align='center')
+        arcade.draw_text('Instructions', WIDTH/2, HEIGHT/2 + 200, arcade.color.BLACK, 35,
+                         anchor_x='center', anchor_y='center', align='center')
+        arcade.draw_text('Movement \n\n W,A,S,D to move.', WIDTH/2, HEIGHT/2 + 100, arcade.color.ORANGE, 25,
+                         anchor_x='center', anchor_y='center', align='center')
+        arcade.draw_text('Shooting \n\n Left click to shoot.', WIDTH/2, HEIGHT/2, arcade.color.RED, 25,
+                         anchor_x='center', anchor_y='center', align='center')
+        arcade.draw_text('Aiming \n\n Cursor to aim.', WIDTH/2, HEIGHT/2 - 100, arcade.color.GRAPE, 25,
+                         anchor_x='center', anchor_y='center', align='center')
 
         # Set up back button
         back_option.draw()
@@ -304,8 +303,38 @@ class Instructions():
 
         return False
 
-    def on_hover(self,mouse_x,mouse_y):
-        back_option.on_hover(mouse_x,mouse_y)
+    def on_hover(self, mouse_x, mouse_y):
+        back_option.on_hover(mouse_x, mouse_y)
+
+class Exitscreen():
+    def __init__(self):
+        default_color = (240, 63, 63)
+        hover_color = (204, 255, 229)
+        current_color = default_color
+
+        global back_option
+        back_option = Button(75, 50, 75, 50, default_color, hover_color, current_color, 'Back')
+
+    def draw(self,score):
+
+        # Print exitscreen txt
+
+        arcade.draw_text('Your Died \n\n Your Score: {}'.format(score), WIDTH / 2, HEIGHT / 2, arcade.color.BLACK,40,
+                         align='center', anchor_x='center', anchor_y='center')
+
+        # Set up back button
+        back_option.draw()
+
+    def on_click(self, mouse_x, mouse_y):
+
+        # Box click checks
+        if back_option.on_click(mouse_x, mouse_y) == True:
+            return 'back'
+
+        return False
+
+    def on_hover(self, mouse_x, mouse_y):
+        back_option.on_hover(mouse_x, mouse_y)
 
 class Credits():
     def __init__(self):
@@ -314,11 +343,13 @@ class Credits():
         current_color = default_color
 
         global back_option
-        back_option = Button(75,50,75,50,default_color,hover_color,current_color,'Back')
+        back_option = Button(75, 50, 75, 50, default_color, hover_color, current_color, 'Back')
+
     def draw(self):
 
         # Set up credits txt
-        arcade.draw_text('This game is so far made entirely by Thomas Wu',WIDTH / 2, HEIGHT / 2, arcade.color.BLACK,22,anchor_y='center',anchor_x='center',align='center')
+        arcade.draw_text('This game is so far made entirely by Thomas Wu', WIDTH / 2, HEIGHT / 2, arcade.color.BLACK, 22,
+                         anchor_y='center', anchor_x='center', align='center')
 
         # Set up back button
         back_option.draw()
@@ -331,13 +362,17 @@ class Credits():
 
         return False
 
-    def on_hover(self,mouse_x,mouse_y):
-        back_option.on_hover(mouse_x,mouse_y)
+    def on_hover(self, mouse_x, mouse_y):
+        back_option.on_hover(mouse_x, mouse_y)
 
 def update(delta_time):
-    if game_bool == True:
-        game.update()
+    global exitscreen_bool, game_bool
 
+    if game_bool == True:
+        # Check for contact
+        if game.update() == 'Contact':
+            exitscreen_bool = True
+            game_bool = False
 
 def on_draw():
     arcade.start_render()
@@ -354,17 +389,19 @@ def on_draw():
     elif game_bool == True:
         game.on_draw()
 
+    elif exitscreen_bool == True:
+        exitscreen.draw(game.game_score)
+
 def on_key_press(key, modifiers):
     if game_bool == True:
         game.on_key_press(key)
-
 
 def on_key_release(key, modifiers):
     if game_bool == True:
         game.on_key_release(key)
 
 def on_mouse_press(x, y, button, modifiers):
-    global main_menu_bool, instructions_bool, game_bool, credits_bool
+    global main_menu_bool, instructions_bool, game_bool, credits_bool, exitscreen_bool
 
     if main_menu_bool == True:
         click_result = main_menu.on_click(x,y)
@@ -375,11 +412,11 @@ def on_mouse_press(x, y, button, modifiers):
                 instructions_bool = True
             elif click_result == 'game':
                 game_bool = True
-            else: # Credits box was clicked
+            else:   # Credits box was clicked
                 credits_bool = True
 
     elif instructions_bool == True:
-        click_result = instructions.on_click(x,y)
+        click_result = instructions.on_click(x, y)
         if click_result != False:
 
             # Go back to main menu
@@ -388,7 +425,7 @@ def on_mouse_press(x, y, button, modifiers):
 
 
     elif credits_bool == True:
-        click_result = credits.on_click(x,y)
+        click_result = credits.on_click(x, y)
 
         if click_result != False:
 
@@ -396,21 +433,33 @@ def on_mouse_press(x, y, button, modifiers):
             credits_bool = False
             main_menu_bool = True
 
+    elif exitscreen_bool == True:
+        click_result = exitscreen.on_click(x, y)
+
+        if click_result != False:
+
+            # Go back to main menu
+            exitscreen_bool = False
+            main_menu_bool = True
+
     elif game_bool == True:
-        game.on_mouse_press(x,y)
+        game.on_mouse_press(x, y)
 
 def on_mouse_motion(x,y,dx,dy):
     if main_menu_bool == True:
-        main_menu.on_hover(x,y)
+        main_menu.on_hover(x, y)
 
     elif instructions_bool == True:
         instructions.on_hover(x,y)
 
     elif credits_bool == True:
-        credits.on_hover(x,y)
+        credits.on_hover(x, y)
 
     elif game_bool == True:
-        game.on_mouse_motion(x,y)
+        game.on_mouse_motion(x, y)
+
+    elif exitscreen_bool == True:
+        exitscreen.on_hover(x, y)
 
 def setup():
     arcade.open_window(WIDTH, HEIGHT, "EZ CLAP TOO EASY")
@@ -434,12 +483,19 @@ def setup():
     global credits
     credits = Credits()
 
-    global main_menu_bool,instructions_bool, credits_bool,game_bool
+    global exitscreen
+    exitscreen = Exitscreen()
+
+    global main_menu_bool,instructions_bool, credits_bool,game_bool, exitscreen_bool
     main_menu_bool = True
     instructions_bool = False
     game_bool = False
     credits_bool = False
+    exitscreen_bool = False
 
+    # Info about the actual game play
+
+    # Bolders
     bolder_skins = [
         'Image Folder/spaceMeteors_001.png',
         'Image Folder/spaceMeteors_002.png',
@@ -447,15 +503,21 @@ def setup():
         'Image Folder/spaceMeteors_004.png'
     ]
     bolder_list = arcade.SpriteList()
-    player = Player('Image Folder/Space_ship.png',0.5, center_x= WIDTH / 2, center_y=HEIGHT / 2)
+
+    # Player and player movement
+    player = Player('Image Folder/Space_ship.png',0.40,center_x= WIDTH / 2, center_y=HEIGHT / 2)
     player.change_x = 0
     player.change_y = 0
     key_map = {'up pressed':False,'down pressed': False, 'right pressed': False, 'left pressed': False}
+
+    # Bullets
     bullet_list = arcade.SpriteList()
+
+    # Score data
     frame_count = 0
     game_score = 0
 
-    # Initial bolder creation
+    # Initial bolder creation (default bolders in the game)
     for i in range(3):
         skin = random.choice(bolder_skins)
         x = random.randint(100,WIDTH - 100)
@@ -467,7 +529,7 @@ def setup():
         bolder_list.append(bolder)
 
     global game
-    game = Game(key_map,frame_count,game_score,bolder_list,bolder_skins,player,bullet_list)
+    game = Game(key_map, frame_count, game_score, bolder_list, bolder_skins, player, bullet_list)
 
     arcade.run()
 
