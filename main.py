@@ -372,7 +372,6 @@ def update(delta_time):
     if game_bool == True:
         # Check for contact
         if game.update() == 'Contact':
-            print('contact')
             exitscreen_bool = True
             game_bool = False
 
