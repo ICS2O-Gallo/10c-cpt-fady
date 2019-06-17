@@ -65,8 +65,8 @@ def bolder_split(bolder,game_info): # Bolder splits into smaller pieces
     y = bolder.center_y
     scale = bolder.scale
 
-    # Make new boldes
-    for i in range(random.randint(2,5)):
+    # Make new bolders
+    for i in range(random.randint(2, 5)):
 
         new_scale = scale * 0.5
         # Check to see if bolder is too small
@@ -79,7 +79,7 @@ def bolder_split(bolder,game_info): # Bolder splits into smaller pieces
 
 
 class Game():
-    def __init__(self,key_map,frame_count,game_score,bolder_list,bolder_skins,player,bullet_list,):
+    def __init__(self, key_map, frame_count, game_score, bolder_list, bolder_skins, player, bullet_list):
         self.key_map = key_map
         self.frame_count = frame_count
         self.game_score = game_score
@@ -208,7 +208,7 @@ class Game():
         self.player.angle = new_angle
 
 class Button():
-    def __init__(self, x, y, w, h, default_color, hover_color, current_color,text):
+    def __init__(self, x, y, w, h, default_color, hover_color, current_color, text):
         self.x = x
         self.y = y
         self.w = w
@@ -220,7 +220,7 @@ class Button():
 
     def draw(self):
         arcade.draw_rectangle_filled(self.x, self.y, self.w, self.h, self.current_color)
-        arcade.draw_text(self.text,self.x,self.y,arcade.color.BLACK,15,anchor_x='center',anchor_y='center')
+        arcade.draw_text(self.text,self.x,self.y,arcade.color.BLACK, 15, anchor_x='center', anchor_y='center')
 
     def on_hover(self,mouse_x,mouse_y):
         if self.x - self.w / 2 <= mouse_x <= self.x + self.w / 2 and self.y - self.h / 2 <= mouse_y <= self.y + self.h / 2:
@@ -228,7 +228,7 @@ class Button():
         else:
             self.current_color = self.default_color
 
-    def on_click(self,mouse_x,mouse_y):
+    def on_click(self, mouse_x, mouse_y):
         if self.x - self.w / 2 <= mouse_x <= self.x + self.w / 2 and self.y - self.h / 2 <= mouse_y <= self.y + self.h / 2:
             return True
 
@@ -236,22 +236,22 @@ class Button():
 
 class Menu():
     def __init__(self): # Why do we still need __init__
-        global instructions_option,game_option,credits_option
+        global instructions_option, game_option, credits_option
         default_color = (240, 63, 63)
         hover_color = (204, 255, 229)
         current_color = default_color
-        instructions_option = Button(WIDTH / 2, HEIGHT / 2 + 100,100,35,
+        instructions_option = Button(WIDTH / 2, HEIGHT / 2 + 100, 100, 35,
                             default_color, hover_color, current_color, 'Instructions')
-        game_option = Button(WIDTH / 2, HEIGHT / 2,100,35,
+        game_option = Button(WIDTH / 2, HEIGHT / 2, 100, 35,
                             default_color, hover_color, current_color, 'Game')
-        credits_option = Button(WIDTH / 2, HEIGHT / 2 - 100,100,35,
+        credits_option = Button(WIDTH / 2, HEIGHT / 2 - 100, 100, 35,
                             default_color, hover_color, current_color, 'Credits')
 
     def draw(self):
         instructions_option.draw()
         game_option.draw()
         credits_option.draw()
-        arcade.draw_text('Shoot Space', WIDTH / 2,HEIGHT / 2 + 225,arcade.color.BLACK, 45,
+        arcade.draw_text('Laser Quest', WIDTH / 2,HEIGHT / 2 + 225,arcade.color.BLACK, 45,
                          align='center', anchor_y='center', anchor_x='center')
 
     def on_hover(self, mouse_x, mouse_y):
@@ -320,7 +320,7 @@ class Exitscreen():
 
         # Print exitscreen txt
 
-        arcade.draw_text('You Died \n\n Your Score: {}'.format(score), WIDTH / 2, HEIGHT / 2, arcade.color.BLACK,40,
+        arcade.draw_text('You Died \n\n Your Score: {}'.format(score), WIDTH / 2, HEIGHT / 2, arcade.color.BLACK, 40,
                          align='center', anchor_x='center', anchor_y='center')
 
         # Set up back button
@@ -349,8 +349,8 @@ class Credits():
     def draw(self):
 
         # Set up credits txt
-        arcade.draw_text('This game is so far made entirely by Thomas Wu', WIDTH / 2, HEIGHT / 2, arcade.color.BLACK, 22,
-                         anchor_y='center', anchor_x='center', align='center')
+        arcade.draw_text('This game is so far made entirely by Thomas Wu', WIDTH / 2, HEIGHT / 2, arcade.color.BLACK,
+                         22, anchor_y='center', anchor_x='center', align='center')
 
         # Set up back button
         back_option.draw()
@@ -392,28 +392,6 @@ def on_draw():
 
     elif exitscreen_bool == True:
         exitscreen.draw(game.game_score)
-
-        # Restart all game logic
-        game.bolder_list = arcade.SpriteList()
-
-        # Initial bolder creation (default bolders in the game)
-        for i in range(3):
-            skin = random.choice(game.bolder_skins)
-            x = random.randint(100, WIDTH - 100)
-            y = random.randint(100, HEIGHT - 100)
-            scale = random.uniform(0.15, 0.23)
-            bolder = Bolder(skin, scale, center_x=x, center_y=y)
-            bolder.change_x = random.uniform(-5, 5 + 1)
-            bolder.change_y = random.uniform(-5, 5 + 1)
-            game.bolder_list.append(bolder)
-
-        # Player movements
-        game.player.change_x = 0
-        game.player.change_y = 0
-        game.key_map = {'up pressed': False, 'down pressed': False, 'right pressed': False, 'left pressed': False}
-
-        # Bullets
-        game.bullet_list = arcade.SpriteList()
 
 def on_key_press(key, modifiers):
     if game_bool == True:
@@ -464,7 +442,40 @@ def on_mouse_press(x, y, button, modifiers):
             # Go back to main menu
             exitscreen_bool = False
             main_menu_bool = True
+
+            # Restart all game logic
+
+            # Bolder list
+            game.bolder_list = arcade.SpriteList()
+
+            # Initial bolder creation (default bolders in the game)
+            for i in range(3):
+                skin = random.choice(game.bolder_skins)
+
+                #Set up bolder position (Make sure not to spawn on player)
+                x_range = [[100, int(WIDTH / 2 - game.player.width)], [int(WIDTH / 2 + game.player.width), WIDTH - 100]]
+                y_range = [[100, int(HEIGHT / 2 - game.player.height)],
+                           [int(HEIGHT / 2 + game.player.height), HEIGHT - 100]]
+                x = random.randint(*random.choice(x_range))
+                y = random.randint(*random.choice(y_range))
+                scale = random.uniform(0.15, 0.23)
+                bolder = Bolder(skin, scale, center_x=x, center_y=y)
+                bolder.change_x = random.uniform(-5, 5 + 1)
+                bolder.change_y = random.uniform(-5, 5 + 1)
+                game.bolder_list.append(bolder)
+
+            # Player movements
+            game.player.change_x = 0
+            game.player.change_y = 0
+            game.player.center_x = WIDTH / 2
+            game.player.center_y = HEIGHT / 2
+            game.key_map = {'up pressed': False, 'down pressed': False, 'right pressed': False, 'left pressed': False}
+
+            # Bullets
+            game.bullet_list = arcade.SpriteList()
+
             game.game_score = 0
+            game.frame_count = 0
 
     elif game_bool == True:
         game.on_mouse_press(x, y)
@@ -486,7 +497,7 @@ def on_mouse_motion(x,y,dx,dy):
         exitscreen.on_hover(x, y)
 
 def setup():
-    arcade.open_window(WIDTH, HEIGHT, "EZ CLAP TOO EASY")
+    arcade.open_window(WIDTH, HEIGHT, 'Laser Quest')
     arcade.set_background_color(arcade.color.GREEN_YELLOW)
     arcade.schedule(update, 1/60)
 
@@ -510,7 +521,7 @@ def setup():
     global exitscreen
     exitscreen = Exitscreen()
 
-    global main_menu_bool,instructions_bool, credits_bool,game_bool, exitscreen_bool
+    global main_menu_bool,instructions_bool, credits_bool, game_bool, exitscreen_bool
     main_menu_bool = True
     instructions_bool = False
     game_bool = False
@@ -518,6 +529,12 @@ def setup():
     exitscreen_bool = False
 
     # Info about the actual gameplay
+
+    # Player and player movement
+    player = Player('Image Folder/Space_ship.png', 0.40, center_x=WIDTH / 2, center_y=HEIGHT / 2)
+    player.change_x = 0
+    player.change_y = 0
+    key_map = {'up pressed': False, 'down pressed': False, 'right pressed': False, 'left pressed': False}
 
     # Bolders
     bolder_skins = [
@@ -532,19 +549,18 @@ def setup():
     # Initial bolder creation (default bolders in the game)
     for i in range(3):
         skin = random.choice(bolder_skins)
-        x = random.randint(100,WIDTH - 100)
-        y = random.randint(100, HEIGHT - 100)
+
+        # Set up bolder position (Make sure not to spawn on player)
+        x_range = [[100, int(WIDTH / 2 - player.width)], [int(WIDTH / 2 + player.width), WIDTH - 100]]
+        y_range = [[100, int(HEIGHT / 2 - player.height)],
+                   [int(HEIGHT / 2 + player.height), HEIGHT - 100]]
+        x = random.randint(*random.choice(x_range))
+        y = random.randint(*random.choice(y_range))
         scale = random.uniform(0.15, 0.23)
-        bolder = Bolder(skin, scale, center_x = x, center_y = y)
-        bolder.change_x = random.uniform(-5,5 + 1)
+        bolder = Bolder(skin, scale, center_x=x, center_y=y)
+        bolder.change_x = random.uniform(-5, 5 + 1)
         bolder.change_y = random.uniform(-5, 5 + 1)
         bolder_list.append(bolder)
-
-    # Player and player movement
-    player = Player('Image Folder/Space_ship.png',0.40,center_x= WIDTH / 2, center_y=HEIGHT / 2)
-    player.change_x = 0
-    player.change_y = 0
-    key_map = {'up pressed':False,'down pressed': False, 'right pressed': False, 'left pressed': False}
 
     # Bullets
     bullet_list = arcade.SpriteList()
